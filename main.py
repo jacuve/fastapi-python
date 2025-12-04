@@ -1,31 +1,42 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import Optional
+from fastapi import FastAPI, HTTPException
+from db import session
+from models.todo import Todo
 
 app = FastAPI()
 
-class Libro(BaseModel):
-    titulo: str
-    autor: str
-    paginas: int
-    editorial: Optional[str]
-
 libros = []
 
-@app.get("/")
-def index():
-    return {"message": "Hola Pythonianos"}
+@app.post("/")
+async def create_todo(text: str, is_done: bool = False):
+    todo = Todo(text=text, is_done=is_done)
+    session.add(todo)
+    session.commit()
+    return {"todo added": todo.text}
 
-@app.get("/libros/{id}")
-def mostrar_libro(id: int):
-    return {"data": id}
+@app.get("/{id}")
+async def get_todo(id: int):
+    todo_query = session.query(Todo).filter(Todo.id == id)
+    todo = todo_query.first()
+    if todo is None:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return todo
+
+@app.put("/{id}")
+async def update_todo(id: int, new_text: str = None, is_done: bool = None):
+    todo_query = session.query(Todo).filter(Todo.id == id)
+    todo = todo_query.first()
+    if new_text:
+        todo.text = new_text
+    todo.is_done = is_done
+    session.add(todo)
+    session.commit()
+    return {"todo updated": todo.text}
 
 
-@app.get("/libros")
-def mostrar_libros():
-    return {"data": libros}
-
-@app.post("/libros")
-def insertar_libro(libro: Libro):
-    libros.append(libro)
-    return {"message": f"libro {libro.titulo} insertado"}
+@app.delete("/{id}")
+async def delete_todo(id: int):
+    todo_query = session.query(Todo).filter(Todo.id == id)
+    todo = todo_query.first()
+    session.delete(todo)
+    session.commit()
+    return {"todo deleted": todo.text}

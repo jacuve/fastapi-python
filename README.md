@@ -1,33 +1,38 @@
-Para usar esto, es necesario python3
+# Proyecto para gestionar tareas.
 
-creamos un entorno virtual
-python3 -m venv fastapi-env
+## Configuracion
 
-activamos
-source fastapi-env/bin/activate
+- creamos un entorno virtual
+  python3 -m venv fastapi-env
 
-instalamos fastapi(framework api)
-pip install fastapi
+- activamos
+  source fastapi-env/bin/activate
 
-instalamos uvicorn (servidor web)
-pip install uvicorn
+- instalamos fastapi(framework api)
+  pip install fastapi
 
-arrancamos y se queda en escucha
-uvicorn main:app --reload
+- instalamos uvicorn (servidor web)
+  pip install uvicorn
 
-Para ejecutar y probar toda la API: :/var/lib/pos
+- Para usar una base de datos Postgresql, 
+  usamos docker, que está definido en el fichero docker-compose.yaml
 
-http://localhost:8000/docs
+- Para usar base de datos, instalar sqlalchemy
+  pip install sqlalchemy
 
+- Para usar Postgresql
+  pip install psycopg2-binary
 
-Para usar una base de datos Postgresql, 
-usamos docker, que está definido en el fichero docker-compose.yaml
+## Ejecución
 
-Para levantar docker:
-docker-compose up -d
+- Activar entorno virutal : 
+  source fastapi-env/bin/activate
 
-Para usar base de datos, instalar sqlalchemy
-pip install sqlalchemy
+- Levantar Docker : 
+  docker compose up -d
 
-Para usar Postgresql
-pip install psycopg2-binary
+- Arrancamos y se queda en escucha
+  uvicorn main:app --reload
+
+- Para ejecutar y probar toda la API: 
+  http://localhost:8000/docs
