@@ -15,7 +15,7 @@ pip install uvicorn
 arrancamos y se queda en escucha
 uvicorn main:app --reload
 
-Para ejecutar y probar toda la API: 
+Para ejecutar y probar toda la API: :/var/lib/pos
 
 http://localhost:8000/docs
 
@@ -25,3 +25,9 @@ usamos docker, que está definido en el fichero docker-compose.yaml
 
 Para levantar docker:
 docker-compose up -d
+
+Para usar base de datos, instalar sqlalchemy
+pip install sqlalchemy
+
+Para usar Postgresql
+pip install psycopg2-binary
